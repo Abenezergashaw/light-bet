@@ -195,7 +195,7 @@ export function useTicket() {
     });
 
     if (!res.data.error) {
-      shareTicketId.value = res.data.fastBetId;
+      shareTicketId.value = res.data.bookingCode;
       console.log(shareTicketId.value);
       toggleModal("share");
     }
