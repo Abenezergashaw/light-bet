@@ -5,9 +5,15 @@ defineProps({
   open: Boolean,
 });
 
-const { loadBookedTicket, bookedTicketLoadError, getPrintTicket } = useTicket();
+const {
+  loadBookedTicket,
+  bookedTicketLoadError,
+  getPrintTicket,
+  loadCashierTicket,
+} = useTicket();
 
 const bookedTicket = ref("");
+const cashierCode = ref("");
 const ticketId = ref("");
 
 const close = () => {
@@ -94,10 +100,12 @@ const close = () => {
       <div class="flex justify-center items-center mt-2">
         <input
           type="text"
+          v-model="cashierCode"
           class="bg-white h-8 w-[75%] px-2"
           placeholder="Insert the id here..."
         />
         <button
+          @click="loadCashierTicket(cashierCode)"
           class="bg-[#49215D] text-white w-[25%] h-8 text-center font-bold"
         >
           Load
