@@ -222,7 +222,7 @@ export function useTicket() {
   const loadCashierTicket = async (id) => {
     const { url } = useUrl();
 
-    const res = await axios.get(`${url}/api/getCashierTicket?ticketId=${id}`);
+    const res = await axios.get(`${url}/api/cashiers-bet?ticketId=${id}`);
 
     if (res.data.error) {
       cashierCodeError.value = res.data?.message;
