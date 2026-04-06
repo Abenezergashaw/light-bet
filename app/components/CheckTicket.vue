@@ -5,6 +5,7 @@ const {
   getPrintTicket,
   loadCashierTicket,
   cashierCodeError,
+  getPrintTicket2,
 } = useTicket();
 
 const bookedTicket = ref("");
@@ -91,7 +92,7 @@ const cashierCode = ref("");
         />
         <button
           @click="
-            getPrintTicket(ticketId);
+            getPrintTicket2(ticketId);
             ticketId = null;
           "
           class="bg-[#49215D] text-white cursor-pointer w-[25%] h-8 md:h-7 text-center font-bold"
