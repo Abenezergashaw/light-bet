@@ -265,6 +265,22 @@ export function useTicket() {
         },
       );
 
+      if (res.data.message === "One or more expired bets.") {
+        const errorBets =
+          Array.isArray(res.data?.data) && res.data.data.length > 0
+            ? res.data.data || []
+            : [];
+
+        console.log("Expired bets:", errorBets);
+        errorBets.forEach((s) => {
+          const t = ticket.value.find((x) => x.reference_id === s.reference_id);
+          if (t) t.errors = s.errors;
+          saveToStorage(ticket.value);
+        });
+        placingBet.value = false;
+        return;
+      }
+
       placingBet.value = false;
 
       placingBetSuccess.value = "Bet placed successfully.";
