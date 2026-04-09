@@ -9,17 +9,17 @@ const { loginModal, registerModal } = useModal();
 const socialMedia = ref([
   {
     name: "Instagram",
-    to: "https://rightbet.org",
+    to: "https://www.lightbet.bet",
     icon: "mdi:instagram",
   },
   {
     name: "Tawk",
-    to: "https://rightbet.org",
+    to: "https://www.lightbet.bet",
     icon: "tdesign:play-circle-filled",
   },
   {
     name: "Facebook",
-    to: "https://rightbet.org",
+    to: "https://www.lightbet.bet",
     icon: "ic:baseline-facebook",
   },
   {
@@ -29,7 +29,7 @@ const socialMedia = ref([
   },
   {
     name: "Telegram",
-    to: "https://rightbet.org",
+    to: "https://www.lightbet.bet",
     icon: "fa6-brands:telegram",
   },
 ]);

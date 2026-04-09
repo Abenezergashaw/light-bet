@@ -194,6 +194,20 @@ export function useTicket() {
       stake: Number(stake.value),
     });
 
+    if (res.data.message === "One or more expired bets.") {
+      const errorBets =
+        Array.isArray(res.data?.data) && res.data.data.length > 0
+          ? res.data.data || []
+          : [];
+
+      errorBets.forEach((s) => {
+        const t = ticket.value.find((x) => x.reference_id === s.reference_id);
+        if (t) t.errors = s.errors;
+        saveToStorage(ticket.value);
+      });
+      return;
+    }
+
     if (!res.data.error) {
       shareTicketId.value = res.data.bookingCode;
       console.log(shareTicketId.value);
