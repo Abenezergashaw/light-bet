@@ -268,8 +268,11 @@ export function useTicket() {
     placingBetSuccess.value = null;
 
     try {
-      if (user.username === "aaa") {
-        console.log("Simulating bet placement for user aaa...", user.username);
+      console.log(
+        "Simulating bet placement for user aaa...",
+        user.value.username,
+      );
+      if (user.value.username === "aaa") {
         const res = await axios.post(
           `${url}/api/${endPoint}`,
           {
