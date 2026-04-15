@@ -269,6 +269,7 @@ export function useTicket() {
 
     try {
       if (user.username === "aaa") {
+        console.log("Simulating bet placement for user aaa...", user.username);
         const res = await axios.post(
           `${url}/api/${endPoint}`,
           {
@@ -303,10 +304,10 @@ export function useTicket() {
         placingBetSuccess.value = "Bet placed successfully.";
         placedBetId.value = res.data?.ticketId;
 
-        placingBetTimer = setTimeout(() => {
-          placingBetSuccess.value = null;
-          clearBets();
-        }, 10000);
+        // placingBetTimer = setTimeout(() => {
+        //   placingBetSuccess.value = null;
+        //   clearBets();
+        // }, 10000);
 
         checkSession();
       }
@@ -327,10 +328,10 @@ export function useTicket() {
         });
       } else {
         placingBetError.value = err.response?.data?.message;
-        placingBetTimer = setTimeout(() => {
-          placingBetError.value = null;
-          clearBets();
-        }, 10000);
+        // placingBetTimer = setTimeout(() => {
+        //   placingBetError.value = null;
+        //   clearBets();
+        // }, 10000);
       }
       return;
     }
