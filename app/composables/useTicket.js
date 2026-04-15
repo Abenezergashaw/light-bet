@@ -71,9 +71,9 @@ export function useTicket() {
     if (normalizedBet.sportId !== 1) return;
 
     // ⬇️ ADD 1 HOUR (LOCAL) → SAVE AS UTC
-    normalizedBet.startTime = addOneHourLocalAndSaveUTC(
-      normalizedBet.startTime,
-    );
+    // normalizedBet.startTime = addOneHourLocalAndSaveUTC(
+    //   normalizedBet.startTime,
+    // );
 
     const referenceId = normalizedBet.reference_id;
 
@@ -255,7 +255,7 @@ export function useTicket() {
     const { url } = useUrl();
     const { toggleModal } = useModal();
 
-    const { loggedIn, checkSession } = useAuth();
+    const { loggedIn, checkSession, user } = useAuth();
     if (!loggedIn.value) {
       toggleModal("login");
       return;
@@ -268,44 +268,48 @@ export function useTicket() {
     placingBetSuccess.value = null;
 
     try {
-      const res = await axios.post(
-        `${url}/api/${endPoint}`,
-        {
-          bets: ticket.value,
-          stake: Number(stake.value),
-        },
-        {
-          withCredentials: true,
-        },
-      );
+      if (user.username === "aaa") {
+        const res = await axios.post(
+          `${url}/api/${endPoint}`,
+          {
+            bets: ticket.value,
+            stake: Number(stake.value),
+          },
+          {
+            withCredentials: true,
+          },
+        );
 
-      if (res.data.message === "One or more expired bets.") {
-        const errorBets =
-          Array.isArray(res.data?.data) && res.data.data.length > 0
-            ? res.data.data || []
-            : [];
+        if (res.data.message === "One or more expired bets.") {
+          const errorBets =
+            Array.isArray(res.data?.data) && res.data.data.length > 0
+              ? res.data.data || []
+              : [];
 
-        console.log("Expired bets:", errorBets);
-        errorBets.forEach((s) => {
-          const t = ticket.value.find((x) => x.reference_id === s.reference_id);
-          if (t) t.errors = s.errors;
-          saveToStorage(ticket.value);
-        });
+          console.log("Expired bets:", errorBets);
+          errorBets.forEach((s) => {
+            const t = ticket.value.find(
+              (x) => x.reference_id === s.reference_id,
+            );
+            if (t) t.errors = s.errors;
+            saveToStorage(ticket.value);
+          });
+          placingBet.value = false;
+          return;
+        }
+
         placingBet.value = false;
-        return;
+
+        placingBetSuccess.value = "Bet placed successfully.";
+        placedBetId.value = res.data?.ticketId;
+
+        placingBetTimer = setTimeout(() => {
+          placingBetSuccess.value = null;
+          clearBets();
+        }, 10000);
+
+        checkSession();
       }
-
-      placingBet.value = false;
-
-      placingBetSuccess.value = "Bet placed successfully.";
-      placedBetId.value = res.data?.ticketId;
-
-      placingBetTimer = setTimeout(() => {
-        placingBetSuccess.value = null;
-        clearBets();
-      }, 10000);
-
-      checkSession();
     } catch (err) {
       placingBet.value = false;
       console.log(err.response?.data?.message);
