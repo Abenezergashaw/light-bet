@@ -269,10 +269,10 @@ export function useTicket() {
 
     try {
       console.log(
-        "Simulating bet placement for user aaa...",
+        "Simulating bet placement for user Light1...",
         user.value.username,
       );
-      if (user.value.username === "aaa") {
+      if (user.value.username === "Light1") {
         const res = await axios.post(
           `${url}/api/${endPoint}`,
           {

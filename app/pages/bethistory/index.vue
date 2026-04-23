@@ -286,7 +286,7 @@ onMounted(async () => {
                   <div>{{ t.event_name }}</div>
                   <div>
                     <span class="text-[10px] opacity-75">{{
-                      convertToEthiopianTime(t.start_time)
+                      t.local_start_time
                     }}</span>
                   </div>
                 </div>
@@ -426,7 +426,7 @@ onMounted(async () => {
             >
               <div>
                 <div class="text-[#49215D]">
-                  {{ convertToEthiopianTime(t.start_time) }}
+                  {{ t.local_start_time }}
                 </div>
                 <div class="text-[#2b2b2b] opacity-75">
                   Football - {{ t.country }} - {{ t.competition }}
