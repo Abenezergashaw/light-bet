@@ -20,7 +20,7 @@ const win = computed(() => {
 
 const bonus = computed(() => {
   const b = currentBonus(totalBets.value);
-  return Math.min(win.value * b, 100000);
+  return Math.min(win.value * b, 25000);
 });
 
 const possibleWin = computed(() => {
@@ -268,52 +268,50 @@ export function useTicket() {
     placingBetSuccess.value = null;
 
     try {
-      console.log(
-        "Simulating bet placement for user Light1...",
-        user.value.username,
+      // console.log(
+      //   "Simulating bet placement for user Light1...",
+      //   user.value.username,
+      // );
+      // if (user.value.username === "Light1") {
+      const res = await axios.post(
+        `${url}/api/${endPoint}`,
+        {
+          bets: ticket.value,
+          stake: Number(stake.value),
+        },
+        {
+          withCredentials: true,
+        },
       );
-      if (user.value.username === "Light1") {
-        const res = await axios.post(
-          `${url}/api/${endPoint}`,
-          {
-            bets: ticket.value,
-            stake: Number(stake.value),
-          },
-          {
-            withCredentials: true,
-          },
-        );
 
-        if (res.data.message === "One or more expired bets.") {
-          const errorBets =
-            Array.isArray(res.data?.data) && res.data.data.length > 0
-              ? res.data.data || []
-              : [];
+      if (res.data.message === "One or more expired bets.") {
+        const errorBets =
+          Array.isArray(res.data?.data) && res.data.data.length > 0
+            ? res.data.data || []
+            : [];
 
-          console.log("Expired bets:", errorBets);
-          errorBets.forEach((s) => {
-            const t = ticket.value.find(
-              (x) => x.reference_id === s.reference_id,
-            );
-            if (t) t.errors = s.errors;
-            saveToStorage(ticket.value);
-          });
-          placingBet.value = false;
-          return;
-        }
-
+        console.log("Expired bets:", errorBets);
+        errorBets.forEach((s) => {
+          const t = ticket.value.find((x) => x.reference_id === s.reference_id);
+          if (t) t.errors = s.errors;
+          saveToStorage(ticket.value);
+        });
         placingBet.value = false;
-
-        placingBetSuccess.value = "Bet placed successfully.";
-        placedBetId.value = res.data?.ticketId;
-
-        // placingBetTimer = setTimeout(() => {
-        //   placingBetSuccess.value = null;
-        //   clearBets();
-        // }, 10000);
-
-        checkSession();
+        return;
       }
+
+      placingBet.value = false;
+
+      placingBetSuccess.value = "Bet placed successfully.";
+      placedBetId.value = res.data?.ticketId;
+
+      // placingBetTimer = setTimeout(() => {
+      //   placingBetSuccess.value = null;
+      //   clearBets();
+      // }, 10000);
+
+      checkSession();
+      // }
     } catch (err) {
       placingBet.value = false;
       console.log(err.response?.data?.message);

@@ -247,7 +247,7 @@ onMounted(async () => {
                           Number(b.bonus_amount) -
                           Number(b.tax_amount)
                         ).toFixed(2),
-                        850000,
+                        212500,
                       )
                     : b.status === "lost"
                       ? 0.0
@@ -367,7 +367,7 @@ onMounted(async () => {
                       Number(b.bonus_amount) -
                       Number(b.tax_amount)
                     ).toFixed(2),
-                    850000,
+                    212500,
                   )
                 }}
                 ETB
