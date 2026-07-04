@@ -313,6 +313,10 @@ export function useTicket() {
         // }, 10000);
 
         checkSession();
+      } else {
+        placingBet.value = false;
+
+        placingBetError.value = "Placing bet is not available.";
       }
     } catch (err) {
       placingBet.value = false;
