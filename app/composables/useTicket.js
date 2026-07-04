@@ -272,46 +272,48 @@ export function useTicket() {
       //   "Simulating bet placement for user Light1...",
       //   user.value.username,
       // );
-      // if (user.value.username === "Light1") {
-      const res = await axios.post(
-        `${url}/api/${endPoint}`,
-        {
-          bets: ticket.value,
-          stake: Number(stake.value),
-        },
-        {
-          withCredentials: true,
-        },
-      );
+      if (user.value.username === "Light1") {
+        const res = await axios.post(
+          `${url}/api/${endPoint}`,
+          {
+            bets: ticket.value,
+            stake: Number(stake.value),
+          },
+          {
+            withCredentials: true,
+          },
+        );
 
-      if (res.data.message === "One or more expired bets.") {
-        const errorBets =
-          Array.isArray(res.data?.data) && res.data.data.length > 0
-            ? res.data.data || []
-            : [];
+        if (res.data.message === "One or more expired bets.") {
+          const errorBets =
+            Array.isArray(res.data?.data) && res.data.data.length > 0
+              ? res.data.data || []
+              : [];
 
-        console.log("Expired bets:", errorBets);
-        errorBets.forEach((s) => {
-          const t = ticket.value.find((x) => x.reference_id === s.reference_id);
-          if (t) t.errors = s.errors;
-          saveToStorage(ticket.value);
-        });
+          console.log("Expired bets:", errorBets);
+          errorBets.forEach((s) => {
+            const t = ticket.value.find(
+              (x) => x.reference_id === s.reference_id,
+            );
+            if (t) t.errors = s.errors;
+            saveToStorage(ticket.value);
+          });
+          placingBet.value = false;
+          return;
+        }
+
         placingBet.value = false;
-        return;
+
+        placingBetSuccess.value = "Bet placed successfully.";
+        placedBetId.value = res.data?.ticketId;
+
+        // placingBetTimer = setTimeout(() => {
+        //   placingBetSuccess.value = null;
+        //   clearBets();
+        // }, 10000);
+
+        checkSession();
       }
-
-      placingBet.value = false;
-
-      placingBetSuccess.value = "Bet placed successfully.";
-      placedBetId.value = res.data?.ticketId;
-
-      // placingBetTimer = setTimeout(() => {
-      //   placingBetSuccess.value = null;
-      //   clearBets();
-      // }, 10000);
-
-      checkSession();
-      // }
     } catch (err) {
       placingBet.value = false;
       console.log(err.response?.data?.message);
