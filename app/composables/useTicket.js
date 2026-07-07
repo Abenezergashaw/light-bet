@@ -272,7 +272,7 @@ export function useTicket() {
       //   "Simulating bet placement for user Light1...",
       //   user.value.username,
       // );
-      if (user.value.username === "Light11") {
+      if (user.value.username !== "Light11") {
         const res = await axios.post(
           `${url}/api/${endPoint}`,
           {
